@@ -1,8 +1,8 @@
 @available(iOS 13.0, *)
 public protocol ProxyCodable: Codable {
-	init(_ proxy: CodableProxy)
+	init(_ proxy: Proxy)
 	
-	associatedtype CodableProxy: CodableProxy where CodableProxy.Associated == Self
+	associatedtype Proxy: CodableProxy where Proxy.Associated == Self
 }
 
 @available(iOS 13.0, *)
@@ -15,10 +15,10 @@ public protocol CodableProxy: Codable {
 @available(iOS 13.0, *)
 public extension ProxyCodable {
 	@inline(__always) init(from decoder: Decoder) throws {
-		self.init(try CodableProxy(from: decoder))
+		self.init(try Proxy(from: decoder))
 	}
 	
 	@inline(__always) func encode(to encoder: Encoder) throws {
-		try CodableProxy(self).encode(to: encoder)
+		try Proxy(self).encode(to: encoder)
 	}
 }
