@@ -1,24 +1,17 @@
-@available(iOS 13.0, *)
 public protocol ProxyCodable: Codable {
-	init(_ proxy: Proxy)
+	associatedtype Proxy: Codable
 	
-	associatedtype Proxy: CodableProxy where Proxy.Associated == Self
+	func encode() -> Proxy
+	
+	init(proxy: Proxy)
 }
 
-@available(iOS 13.0, *)
-public protocol CodableProxy: Codable {
-	init(_ associated: Associated)
-	
-	associatedtype Associated
-}
-
-@available(iOS 13.0, *)
 public extension ProxyCodable {
-	@inline(__always) init(from decoder: Decoder) throws {
-		self.init(try Proxy(from: decoder))
+	@inline(__always) func encode(to encoder: Encoder) throws {
+		try encode().encode(to: encoder)
 	}
 	
-	@inline(__always) func encode(to encoder: Encoder) throws {
-		try Proxy(self).encode(to: encoder)
+	@inline(__always) init(from decoder: Decoder) throws {
+		self.init(proxy: try Proxy(from: decoder))
 	}
 }

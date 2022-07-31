@@ -2,15 +2,16 @@
 
 A very simple set of two protocols which makes conforming classes to `Codable` more automatic.
 
-Normally to conform to `Codable`, a class must manually encode/decode individual properties. Using `ProxyCodable`, you can instead offer a struct (which conforms to `CodableProxy`) to utilize the struct's ability to automatically conform to `Codable` without the manual labor.
+Normally to conform to `Codable`, a class must manually encode/decode individual properties. Structs do this automatically when its members all already conform to `Codable`.
+
+Using `ProxyCodable`, you can conform a class to `Codable` utlizing an additional struct type to gain this automatic behavior.
 
 ## Guide
 
-1. Conform a class (or a struct) to `ProxyCodable`.
-2. Conform a struct (which is capable of being `Codable`) to `CodableProxy`.
-3. Associate one with the other, and write the required initializers.
-
-You now have conformance to `Codable` on a class via a proxy type. This saves you the effort of manually encoding/decoding individual properties.  
+1. Conform a class **A** to `ProxyCodable`.
+2. Create a struct **B** which conforms to `Codable`.
+3. Connect the two types using the `init(proxy: B)` initializer and the `encode()` method within A.
+4. **A** now conforms to `Codable`, utilizing the code of **B**.
 
 ## Installation
 
